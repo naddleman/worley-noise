@@ -7,8 +7,13 @@
 (defn random-sites [w h n]
   (take n (shuffle (coords w h))))
 
+(defn abs [x]
+  (if (neg? x) (- x) x))
+
 (defn manhattan_distance [x1 y1 x2 y2]
-  (+ (Math/abs (- x1 x2)) (Math/abs (- y1 y2))))
+  (+ (abs (- x1 x2)) (abs (- y1 y2))))
+  ;(+ (Math/abs (- x1 x2)) (Math/abs (- y1 y2)))) <- that was the problem!
+
 
 (defn m_dists [x1 y1 pts]
   "returns a sorted sequence of manhattan distances between (x1 y1) and pts
@@ -23,11 +28,6 @@
                                                     (rand-int h))))]
     (for [[x y] (coords w h)]
       (vec (concat [x y] (m_dists x y feature_points))))))
-
-(time (dorun (for [[x y] (coords 50 50)]
-               (m_dists x y [[1 1] [2 2] [3 3] [5 4] [4 5] [6 0] [0 6]
-                            [2 8] [8 2] [9 5]]))))
-(time (dorun (dvec 50 50 10)))
 
 (defn distance-block [d maxdist]
   "replaces distance d with unicode block characters of different values
@@ -95,8 +95,8 @@
         (recur (inc line) (drop w bs))))))
 
 (defn -main []
-  ;(print-noise 80 24 20 0)
-  ;(println)
+  (print-noise 80 24 20 0)
+  (println)
   (print-noise 80 24 20 1)
   (println)
   (print-noise 80 24 20 2))
