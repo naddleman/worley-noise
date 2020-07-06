@@ -11,7 +11,8 @@
   (+ (Math/abs (- x1 x2)) (Math/abs (- y1 y2))))
 
 (defn m_dists [x1 y1 pts]
-  "returns a sorted sequence of manhattan distances between (x1 y1) and pts"
+  "returns a sorted sequence of manhattan distances between (x1 y1) and pts
+   Calling this w * h * n times is the slow part."
   (sort (map #(manhattan_distance x1 y1 (first %1) (second %1)) pts)))
 
 (defn dvec [w h n]
@@ -22,6 +23,11 @@
                                                     (rand-int h))))]
     (for [[x y] (coords w h)]
       (vec (concat [x y] (m_dists x y feature_points))))))
+
+(time (dorun (for [[x y] (coords 50 50)]
+               (m_dists x y [[1 1] [2 2] [3 3] [5 4] [4 5] [6 0] [0 6]
+                            [2 8] [8 2] [9 5]]))))
+(time (dorun (dvec 50 50 10)))
 
 (defn distance-block [d maxdist]
   "replaces distance d with unicode block characters of different values
